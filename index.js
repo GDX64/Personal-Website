@@ -13,17 +13,6 @@ fs.readFile('visits.json', (err, data) => {
     }
 });
 
-//counting visits
-app.use('/', function (res, req, next) {
-    let visit = {
-        date: new Date(),
-        ip: req.connection.remoteAddress
-    }
-    visits.data.push(visit)
-    let data = JSON.stringify(visits);
-    fs.writeFileSync('visits.json', data);
-    next()
-})
 
 //static server
 app.use('/', express.static(__dirname + '/build'));
@@ -36,6 +25,18 @@ app.get('/ext/pj/trillo', function (req, res, next) {
 //sending visit
 app.get('/visits/data', (req, res, next) => {
     res.json(visits)
+})
+
+//counting visits
+app.use('/', function (res, req, next) {
+    let visit = {
+        date: new Date(),
+        ip: req.connection.remoteAddress
+    }
+    visits.data.push(visit)
+    let data = JSON.stringify(visits);
+    fs.writeFileSync('visits.json', data);
+    next()
 })
 
 //default route
